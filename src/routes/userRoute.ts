@@ -14,7 +14,7 @@ router.post('/register' , async(request , response)=>{
 
     // result. statusCode or .data ==> according to the function register in userServices file .
     response.status(result.statusCode).send(result.data);
-
+    
 });
 
 
