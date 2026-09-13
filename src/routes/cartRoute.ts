@@ -1,6 +1,6 @@
 import express from "express";
-import { addItemToCart, getActiveCartForUser } from "../services/cartService.js";
-import validateJWT from "../middlewares/validateJWT.js";
+import { addItemToCart, getActiveCartForUser, updateCartForUser } from "../services/cartService.js";
+import validateJWT, { type ExtendRequest } from "../middlewares/validateJWT.js";
 
 const router = express.Router();
 
@@ -20,5 +20,18 @@ router.post('/items' , validateJWT , async(req : any , res ) =>{
 });
 
 
+
+router.put('/items' , validateJWT , async(req: ExtendRequest , res)=>{
+    const userId = req?.user?._id;
+    const {productId , quantity} = req.body;
+    const response = await updateCartForUser({userId , productId , quantity});
+
+    // For checking only.
+    if (!response.statusCode) 
+    {
+    return res.status(500).send({ message: "Internal server error" });
+    }
+    res.status(response.statusCode).send(response.data);
+});
 
 export default router;

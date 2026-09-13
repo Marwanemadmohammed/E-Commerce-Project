@@ -61,4 +61,4 @@ export const loginUser = async ({email , password} : LoginParams)=>{
 
 const generateJWT = (data : any) =>{
     return jwt.sign(data , "GhMeEd9080472006");
-}
+};

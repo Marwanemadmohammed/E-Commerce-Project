@@ -3,7 +3,7 @@ import jwt  from "jsonwebtoken";
 import UserModel from "../models/userModel.js";
 
 
-interface ExtendRequest extends Request{
+export interface ExtendRequest extends Request{
     user?: any;
 }
 

@@ -11,6 +11,7 @@ const port = 3001;
 // This to know to send the request json body to transform it to put it in request.body
 app.use(express.json());
 
+
 // Here connect the database with express(BackEnd).
 mongoose
     .connect("mongodb://localhost:27017/ecommerce")
@@ -20,14 +21,14 @@ mongoose
 
     app.use('/user' , userRoute)
 
-    seedInitialProduct();
-    
-    // Seed the products to database
 
+    seedInitialProduct();
+    // Seed the products to database
     app.use('/product' , productRoute);
 
     
     app.use('/cart' , cartRoute);
+
 
 app.listen(port , ()=>{
     console.log(`Server is running in http://localhost:${port}`);
