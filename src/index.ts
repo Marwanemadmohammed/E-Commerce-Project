@@ -1,3 +1,4 @@
+import dotenv from "dotenv";
 import express from "express";
 import mongoose from "mongoose";
 import userRoute from "./routes/userRoute.js";
@@ -5,16 +6,21 @@ import { seedInitialProduct } from "./services/productService.js";
 import productRoute from "./routes/productRoute.js"
 import cartRoute from "./routes/cartRoute.js"
 
+
+// For the .env to work
+dotenv.config();
+
 const app = express();
 const port = 3001;
+
 
 // This to know to send the request json body to transform it to put it in request.body
 app.use(express.json());
 
 
 // Here connect the database with express(BackEnd).
-mongoose
-    .connect("mongodb://localhost:27017/ecommerce")
+await mongoose
+    .connect(process.env.DATABASE_URL || "")
     .then(() => console.log("Mongo connected"))
     .catch((err) => console.log("Faild to connect", err));
 

@@ -60,5 +60,5 @@ export const loginUser = async ({email , password} : LoginParams)=>{
 
 
 const generateJWT = (data : any) =>{
-    return jwt.sign(data , "GhMeEd9080472006");
+    return jwt.sign(data , process.env.JWT_SECRET || ""); // || " " If the JWT_SECRET is undefined.
 };
