@@ -1,5 +1,5 @@
 import express from "express";
-import { addItemToCart, ClearCart, deleteItemInCart, getActiveCartForUser, updateCartForUser } from "../services/cartService.js";
+import { addItemToCart, checkout, ClearCart, deleteItemInCart, getActiveCartForUser, updateCartForUser } from "../services/cartService.js";
 import validateJWT, { type ExtendRequest } from "../middlewares/validateJWT.js";
 
 const router = express.Router();
@@ -63,7 +63,27 @@ router.delete('/' , validateJWT , async(req: ExtendRequest , res)=>{
         return res.status(500).send({message : "Internal server error "});
     }
     res.status(response.statusCode).send(response.data);
-})
+});
+
+
+
+
+// From order 
+
+router.post('/checkout' , validateJWT , async (req: ExtendRequest , res)=>{
+    const userId = req?.user?._id;
+    const {address} = req.body;
+    if(!address){
+        return res.status(500).send({message : "Address must be entered "});
+    }
+    const response = await checkout({ userId , address });
+    
+    if(!response.statusCode)
+    {
+        return res.status(500).send({message : "Internal server error "});
+    }
+    res.status(response.statusCode).send(response.data);
+});
 
 
 

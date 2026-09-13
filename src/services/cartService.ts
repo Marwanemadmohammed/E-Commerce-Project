@@ -1,6 +1,8 @@
 import { STATES } from "mongoose";
 import { cartModel} from "../models/cartModel.js";
 import ProductModel, { type Product } from "../models/productModel.js";
+import { Checker } from "typescript/unstable/sync";
+import { OrderModel , type OrderItem } from "../models/orderModel.js";
 
 
 
@@ -190,5 +192,58 @@ export const ClearCart = async ({userId} : clearCart)=>{
 
     return {data : clearedCart , statusCode: 200};
     
+};
+
+
+
+// To Checkout the order
+
+interface Checkout{
+    userId: string;
+    address: string;
+};
+
+
+
+export const checkout = async ({ userId  , address} : Checkout)=>{
+    const cart = await getActiveCartForUser({userId}); 
+    
+    if(!address){
+        return {data : "Please enter the address" , statusCode: 400};
+    };
+
+    const OrderItems: OrderItem[] = [];
+    // Loop on the cart and make the orderItems
+    for( const item of cart.items){
+        const product = await ProductModel.findById(item.product);
+
+        if(!product){
+            return {data: "Product is not found" , statusCode: 400};
+        };
+
+        const Order_Item : OrderItem = {
+            productTitle: product.title,
+            productImage: product.imageUrl,
+            productPrice: item.unitPrice,
+            productQuantity: item.quantity
+        }
+
+        OrderItems.push(Order_Item);
+    };
+
+    const order = await OrderModel.create({
+        OrderItems,
+        userId,
+        totalPrice: cart.totalPrice,
+        address
+    })
+
+    await order.save();
+
+    cart.status = "completed";
+
+    await cart.save();
+
+    return {data : order , statusCode: 200};
 };
 
