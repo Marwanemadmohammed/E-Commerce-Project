@@ -1,8 +1,10 @@
 import express from "express";
-import { addItemToCart, getActiveCartForUser, updateCartForUser } from "../services/cartService.js";
+import { addItemToCart, ClearCart, deleteItemInCart, getActiveCartForUser, updateCartForUser } from "../services/cartService.js";
 import validateJWT, { type ExtendRequest } from "../middlewares/validateJWT.js";
 
 const router = express.Router();
+
+
 
 
 router.get('/' , validateJWT , async (req : any, res) =>{
@@ -10,6 +12,8 @@ router.get('/' , validateJWT , async (req : any, res) =>{
     const cart = await getActiveCartForUser({ userId });
     res.status(200).send(cart);
 });
+
+
 
 
 router.post('/items' , validateJWT , async(req : any , res ) =>{
@@ -33,5 +37,34 @@ router.put('/items' , validateJWT , async(req: ExtendRequest , res)=>{
     }
     res.status(response.statusCode).send(response.data);
 });
+
+
+// To delete on itam 
+router.delete('/items/:productId', validateJWT , async(req : ExtendRequest , res)=>{
+    const userId = req?.user?._id;
+    const { productId } = req.params;
+    const response = await deleteItemInCart({ userId , productId});
+    if(!response.statusCode){
+        return res.status(500).send({message : "Internal server error "});
+    }
+    res.status(response.statusCode).send(response.data);
+});
+
+
+
+
+// To delete all items in the cart
+router.delete('/' , validateJWT , async(req: ExtendRequest , res)=>{
+    const userId = req?.user?._id;
+    const response = await ClearCart({ userId });
+
+    if(!response.statusCode)
+    {
+        return res.status(500).send({message : "Internal server error "});
+    }
+    res.status(response.statusCode).send(response.data);
+})
+
+
 
 export default router;

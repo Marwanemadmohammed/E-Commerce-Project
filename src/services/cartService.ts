@@ -1,5 +1,7 @@
+import { STATES } from "mongoose";
 import { cartModel} from "../models/cartModel.js";
 import ProductModel, { type Product } from "../models/productModel.js";
+
 
 
 interface createCartForUser{
@@ -11,6 +13,10 @@ const createCartForUser = async ({userId}:createCartForUser)=>{
     await cart.save();
     return cart;
 };
+
+
+
+
 
 
 
@@ -29,6 +35,12 @@ export const getActiveCartForUser = async ({userId}: getActiveCartForUser)=>{
 
     return getCart;
 };
+
+
+
+
+
+
 
 
 
@@ -70,6 +82,11 @@ export const addItemToCart = async ({productId , quantity , userId} : AddItemToC
 };
 
 
+
+
+
+
+
 interface UpdateCartForUser{
     productId: any;
     quantity: number;
@@ -104,8 +121,6 @@ export const updateCartForUser = async ({productId , quantity ,userId} : UpdateC
 
     const otherCartItems = cart.items.filter((p)=> p.product.toString() !== productId);
 
-    console.log(otherCartItems);
-
     let total = otherCartItems.reduce((sum , product)=>{
         sum += product.quantity * product.unitPrice;
         return sum;
@@ -122,3 +137,58 @@ export const updateCartForUser = async ({productId , quantity ,userId} : UpdateC
     // Calculate the total price for the updated cart
 
 };
+
+
+
+interface DeleteItemInCart{
+    userId: string;
+    productId: any;
+};
+
+
+export const deleteItemInCart = async ({userId , productId} : DeleteItemInCart)=>{
+    const cart = await getActiveCartForUser({userId});
+        const existsItemInCart = cart.items.find((p)=> p.product.toString() === productId); 
+    if(!existsItemInCart){
+        return {data : "Item does not exist in the cart !"};
+    };
+    
+    const otherCartItems = cart.items.filter((p)=> p.product.toString() !== productId);
+
+    let total = otherCartItems.reduce((sum , product)=>{
+        sum += product.quantity * product.unitPrice;
+        return sum;
+    },0);
+
+    cart.totalPrice = total;
+
+    cart.items = otherCartItems;
+
+    const updatedCart = await cart.save();
+
+    return {data : updatedCart , statusCode : 200};
+};
+
+
+
+
+
+
+// Clear all the cart 
+interface clearCart{
+    userId: string;
+};
+
+
+export const ClearCart = async ({userId} : clearCart)=>{
+    const cart = await getActiveCartForUser({userId}); 
+    
+    cart.items = [];
+    cart.totalPrice = 0;
+
+    const clearedCart = await cart.save();
+
+    return {data : clearedCart , statusCode: 200};
+    
+};
+
