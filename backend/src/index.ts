@@ -5,7 +5,7 @@ import userRoute from "./routes/userRoute.js";
 import { seedInitialProduct } from "./services/productService.js";
 import productRoute from "./routes/productRoute.js"
 import cartRoute from "./routes/cartRoute.js"
-
+import cors from "cors";
 
 // For the .env to work
 dotenv.config();
@@ -16,6 +16,7 @@ const port = 3001;
 
 // This to know to send the request json body to transform it to put it in request.body
 app.use(express.json());
+app.use(cors());
 
 
 // Here connect the database with express(BackEnd).
