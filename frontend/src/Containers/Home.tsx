@@ -38,21 +38,35 @@ const HomePage = () => {
 
 
     return (
-        <Container sx={{ mt: 10 ,display:"flex", justifyContent:"center"  }}>
-            <Grid container spacing={5}  sx={{display:"flex", justifyContent:"center"}}>
-                {products.map((p )=>(
-                    <Grid  size={{ xs: 12, sm: 6, md: 4 }}>
-                        <ProductCard
-                            title={p.title}
-                            imageUrl={p.imageUrl}
-                            price={p.price}
-                            id={p._id}
-                            />
-                    </Grid>   
-                ))}
-
-            </Grid>
-        </Container>
+<Container sx={{ mt: 10, maxWidth: '1200px !important' }}>
+    <Box 
+        sx={{ 
+            display: 'flex', 
+            flexWrap: 'wrap', 
+            gap: '20px', 
+            justifyContent: "flex-start"
+        }}
+    >
+        {products.map((p) => (
+            <Box 
+                key={p._id}
+                sx={{ 
+                    flex: { xs: '0 0 100%', sm: '0 0 calc(50% - 10px)', md: '0 0 calc(33.333% - 14px)' },
+                    boxSizing: 'border-box',
+                    display: 'flex', 
+                    flexDirection: 'column'
+                }}
+            >
+                <ProductCard
+                    title={p.title}
+                    imageUrl={p.imageUrl}
+                    price={p.price}
+                    id={p._id}
+                />
+            </Box>   
+        ))}
+    </Box>
+</Container>
     );
 };
 
