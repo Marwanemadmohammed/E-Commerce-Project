@@ -14,6 +14,7 @@ import { useAuth } from '../Context/Auth/AuthContext';
 import { Badge, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import  ShoppingCart  from '@mui/icons-material/ShoppingCart';
+import { useCart } from '../Context/Cart/CartContext';
 
 
 function Navbar() {
@@ -21,6 +22,8 @@ function Navbar() {
     const {userName , isAutheticated , logout} = useAuth();
 
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+
+    const { cartItems } = useCart();
 
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget);
@@ -86,7 +89,7 @@ function Navbar() {
                             color:"#24acce"
                         }}
                     >
-                        Tech Hub
+                        TECH HUB
                     </Typography>
                     </Box>
 
@@ -96,7 +99,7 @@ function Navbar() {
                         <Tooltip title="Open settings">
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 4, cursor: 'pointer' }}>
                                     <IconButton aria-label="cart" onClick={handleCart}>
-                                        <Badge badgeContent={2} color="secondary">
+                                        <Badge badgeContent={cartItems.length} color="primary">
                                             <ShoppingCart />
                                         </Badge>
                                     </IconButton>
