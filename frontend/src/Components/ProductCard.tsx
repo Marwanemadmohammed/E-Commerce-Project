@@ -18,7 +18,7 @@ export default function ProductCard({id , price , title , imageUrl} : Props) {
         <CardMedia
         sx={{ height: 300}}
         image={imageUrl}
-        title={"green iguana"}
+        title={title.split(" ")[0]}
         />
         <CardContent sx={{marginTop:"30px"}}>
         <Typography gutterBottom variant="h6" component="div">
