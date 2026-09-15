@@ -148,24 +148,19 @@ const CartProvider : FC<PropsWithChildren> = ({ children }) => {
             };
     
 
-            const deleteItemIncart = async (productId:string)=>{
+            const deleteItemFromCart = async (productId:string)=>{
             try{
-            const response = await fetch(`${BASE_URL}/cart/items`,
+            const response = await fetch(`${BASE_URL}/cart/items/${productId}`,
             {
-            method: "Delete",
+            method: "DELETE",
             headers :{
-                "Content-Type" : "application/json",
                 "Authorization": `Bearer ${token}`
             },
-            body: JSON.stringify({
-                productId,
-
-            })
         });
 
         if(!response.ok)
             {
-                setError("Faild to update to Cart !");
+                setError("Faild to delete to Cart !");
             };
 
             const cart = await response.json();
@@ -194,10 +189,45 @@ const CartProvider : FC<PropsWithChildren> = ({ children }) => {
                     console.log(error);
                 }
             };
+
+
+                        const clearCart = async ()=>{
+            try{
+            const response = await fetch(`${BASE_URL}/cart`,
+            {
+            method: "DELETE",
+            headers :{
+                "Authorization": `Bearer ${token}`
+            },
+        });
+
+        if(!response.ok)
+            {
+                setError("Faild to clear to Cart !");
+            };
+
+            const cart = await response.json();
+
+
+            if(!cart){
+                setError("Faild to parse Cart data");
+            };
+
+            setCartItems([ ]);
+            setTotalPrice(0);
+            }
+            catch(error)
+                {
+                    console.log(error);
+                }
+            };
+
+
+
             
 
     return(
-            <CartContext.Provider value={{ cartItems , totalPrice , addItemToCart , updateItemCart }}>
+            <CartContext.Provider value={{ cartItems , totalPrice , addItemToCart , updateItemCart , deleteItemFromCart , clearCart}}>
                 {children}
             </CartContext.Provider>
     )

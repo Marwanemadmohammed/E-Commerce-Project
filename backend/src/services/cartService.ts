@@ -198,7 +198,7 @@ export const ClearCart = async ({userId} : clearCart)=>{
 
     const clearedCart = await cart.save();
 
-    return {data : clearedCart , statusCode: 200};
+    return {data : await getActiveCartForUser({userId , populateProduct: true}) , statusCode: 200};
     
 };
 
