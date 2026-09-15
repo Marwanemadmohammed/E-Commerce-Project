@@ -1,49 +1,50 @@
-import { Container, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { Box, Container, Typography } from "@mui/material";
+import { useEffect, useState, type JSXElementConstructor, type ReactElement, type ReactNode, type ReactPortal } from "react";
 import { BASE_URL } from "../Constants/BaseURL";
 import { useAuth } from "../Context/Auth/AuthContext";
+import { useCart } from "../Context/Cart/CartContext";
 
 
 
 const CartContainer = () => {
 
     const {token} = useAuth();
-
-    const [cart , setCart] = useState();
+    const {cartItems , totalPrice} = useCart();
     const [error , setError] = useState("");
 
-    useEffect(()=>{
+    // useEffect(()=>{
 
-        if(!token){
-            return;
-        };
+    //     if(!token){
+    //         return;
+    //     };
 
 
-        const fetchCart = async () => {
-            const response = await fetch(`${BASE_URL}/cart`,{
-                headers:{
-                    "Authorization": `Bearer ${token}`
-                }
-            });
+    //     const fetchCart = async () => {
+    //         const response = await fetch(`${BASE_URL}/cart`,{
+    //             headers:{
+    //                 "Authorization": `Bearer ${token}`
+    //             }
+    //         });
             
-            if(!response.ok){
-                setError("Faild to fetch User Cart , please try again later");
-            };
+    //         if(!response.ok){
+    //             setError("Faild to fetch User Cart , please try again later");
+    //         };
 
-            const data = await response.json();
-            setCart(data);
-        };
+    //         const data = await response.json();
+    //         setCart(data);
+    //     };
 
 
 
-        fetchCart();
-    },[token]);
-
-    console.log(cart);
+    //     fetchCart();
+    // },[token]);
 
     return(
         <Container sx={{marginTop:"80px"}}>
         <Typography variant="h2">My cart</Typography>
+        {cartItems.map((item)=>(
+            <Box>{item.title}</Box>
+        ))}
         </Container>
     );
 };
