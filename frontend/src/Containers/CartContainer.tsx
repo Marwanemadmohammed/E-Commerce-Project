@@ -7,7 +7,15 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 
 const CartContainer = () => {
 
-    const {cartItems , totalPrice} = useCart();
+    const {cartItems , totalPrice , updateItemCart} = useCart();
+
+    const handleQuantity = (productId: string , quantity: number) => {
+        if(quantity > 0){
+            updateItemCart(productId , quantity);
+        }
+    };
+        
+
     
     return(
         <Container sx={{mt: 10}}>
@@ -24,8 +32,8 @@ const CartContainer = () => {
                         </Box>
                     </Box>
                         <ButtonGroup variant="contained" aria-label="Basic button group">
-                            <Button sx={{fontSize:"bold"}}>-</Button>
-                            <Button sx={{fontSize:"bold"}}>+</Button>
+                            <Button onClick={() => handleQuantity(item.productId , (item.quantity - 1))} sx={{fontSize:"bold"}}>-</Button>
+                            <Button onClick={() => handleQuantity(item.productId , (item.quantity + 1))} sx={{fontSize:"bold"}}>+</Button>
                         </ButtonGroup>
                 </Box>
             ))}

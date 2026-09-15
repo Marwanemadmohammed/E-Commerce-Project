@@ -16,7 +16,6 @@ const CartProvider : FC<PropsWithChildren> = ({ children }) => {
 
 
         useEffect(()=>{
-
         if(!token){
             return;
         };
@@ -48,8 +47,6 @@ const CartProvider : FC<PropsWithChildren> = ({ children }) => {
             setCartItems(cartItemMapped);
             setTotalPrice(cart.totalPrice);
         };
-
-
 
         fetchCart();
     },[token]);
@@ -84,28 +81,123 @@ const CartProvider : FC<PropsWithChildren> = ({ children }) => {
 
 
             const cartItemMapped = cart.items.map(({product , quantity} : {product : any ; quantity: any})=>(
-                {
-                    productId: product._id,
-                    title: product.title,
-                    imageUrl: product.imageUrl,
-                    quantity,
-                    unitPrice: product.unitPrice
-                }
-            ));
-
+                    {
+                        productId: product._id,
+                        title: product.title,
+                        imageUrl: product.imageUrl,
+                        quantity,
+                        unitPrice: product.unitPrice
+                    }
+                ));
 
             setCartItems([...cartItemMapped ]);
             setTotalPrice(cart.totalPrice);
-        }
+            }
+            catch(error)
+                {
+                    console.log(error);
+                }
+            };
 
-        catch(error)
-        {
-            console.log(error);
-        }
-    };
+
+    const updateItemCart = async (productId: string , quantity: number) => {
+        try{
+            const response = await fetch(`${BASE_URL}/cart/items`,
+            {
+            method: "PUT",
+            headers :{
+                "Content-Type" : "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                productId,
+                quantity,
+            })
+        });
+
+        if(!response.ok)
+            {
+                setError("Faild to update to Cart !");
+            };
+
+            const cart = await response.json();
+
+
+            if(!cart){
+                setError("Faild to parse Cart data");
+            };
+
+
+            const cartItemMapped = cart.items.map(({product , quantity , unitPrice} : {product : any ; quantity: any ; unitPrice: number})=>(
+                    {
+                        productId: product._id,
+                        title: product.title,
+                        imageUrl: product.imageUrl,
+                        quantity,
+                        unitPrice
+                    }
+                ));
+
+            setCartItems([...cartItemMapped ]);
+            setTotalPrice(cart.totalPrice);
+            }
+            catch(error)
+                {
+                    console.log(error);
+                }
+            };
+    
+
+            const deleteItemIncart = async (productId:string)=>{
+            try{
+            const response = await fetch(`${BASE_URL}/cart/items`,
+            {
+            method: "Delete",
+            headers :{
+                "Content-Type" : "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                productId,
+
+            })
+        });
+
+        if(!response.ok)
+            {
+                setError("Faild to update to Cart !");
+            };
+
+            const cart = await response.json();
+
+
+            if(!cart){
+                setError("Faild to parse Cart data");
+            };
+
+
+            const cartItemMapped = cart.items.map(({product , quantity , unitPrice} : {product : any ; quantity: any ; unitPrice: number})=>(
+                    {
+                        productId: product._id,
+                        title: product.title,
+                        imageUrl: product.imageUrl,
+                        quantity,
+                        unitPrice
+                    }
+                ));
+
+            setCartItems([...cartItemMapped ]);
+            setTotalPrice(cart.totalPrice);
+            }
+            catch(error)
+                {
+                    console.log(error);
+                }
+            };
+            
 
     return(
-            <CartContext.Provider value={{ cartItems , totalPrice , addItemToCart}}>
+            <CartContext.Provider value={{ cartItems , totalPrice , addItemToCart , updateItemCart }}>
                 {children}
             </CartContext.Provider>
     )
@@ -114,6 +206,4 @@ const CartProvider : FC<PropsWithChildren> = ({ children }) => {
 
 export default CartProvider;
 
-function setCart(data: any) {
-    throw new Error("Function not implemented.");
-}
+

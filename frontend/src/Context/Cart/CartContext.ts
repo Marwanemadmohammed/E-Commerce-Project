@@ -6,10 +6,11 @@ interface CartContextType {
     cartItems: cartItem[];
     totalPrice: number;
     addItemToCart: (productId: string) => void;
+    updateItemCart: (productId: string , quantity:number) => void;
 };
 
 
-export const CartContext = createContext<CartContextType>({cartItems: [] , totalPrice: 0 ,addItemToCart:()=>{}});
+export const CartContext = createContext<CartContextType>({cartItems: [] , totalPrice: 0 , addItemToCart:()=>{} , updateItemCart: ()=>{}});
 
 
 export const useCart = () => useContext(CartContext); 
