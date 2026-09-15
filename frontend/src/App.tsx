@@ -3,6 +3,7 @@ import HomePage from "./Containers/Home"
 import Navbar from "./Components/Navbar"
 import RegisterContainer from "./Containers/RegisterContainer"
 import AuthProvider from "./Context/Auth/AuthProvider"
+import LoginContainer from "./Containers/Login"
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
           <Routes>
             <Route path="/" element = {<HomePage />}/>
             <Route path="/register" element = {<RegisterContainer />} />
+            <Route path="/loginUser" element = {<LoginContainer />} />
           </Routes>
       </BrowserRouter>  
     </AuthProvider>

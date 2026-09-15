@@ -14,22 +14,22 @@ interface Props{
 
 export default function ProductCard({id , price , title , imageUrl} : Props) {
     return (
-    <Card sx={{marginBottom:"20px"}} >
+    <Card sx={{marginBottom:"20px" , padding: "10px" , height:"500px" , position:"relative"}} >
         <CardMedia
         sx={{ height: 300}}
         image={imageUrl}
         title={"green iguana"}
         />
-        <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
+        <CardContent sx={{marginTop:"30px"}}>
+        <Typography gutterBottom variant="h6" component="div">
             {title}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" color="text.secondary" sx={{fontSize:"larger"}}>
             {price} EGP
         </Typography>
         </CardContent>
         <CardActions>
-        <Button variant="contained" size="small">Add to Cart</Button>
+        <Button variant="contained" size="small" sx={{background:"#24acce" , padding:"10px" , position:"absolute" , left:"20px", bottom:"20px" , fontWeight:"bold"}}>Add to Cart</Button>
         </CardActions>
     </Card>
     );

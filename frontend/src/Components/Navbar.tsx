@@ -11,12 +11,13 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { useAuth } from '../Context/Auth/AuthContext';
+import { Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function Navbar() {
 
-    const {userName , token} = useAuth();
+    const {userName , isAutheticated} = useAuth();
 
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
@@ -30,7 +31,12 @@ function Navbar() {
     };
 
 
-    console.log("From navbar",{userName , token})
+    const navigate = useNavigate();
+
+    const handleLogin = () => {
+        navigate("/loginUser");
+    }
+
 
     return (
         <AppBar position="fixed" sx={{backgroundColor: "#fafafa"}}>
@@ -73,12 +79,16 @@ function Navbar() {
                     </Typography>
 
                     <Box sx={{ flexGrow: 0, ml: 'auto' }}>
+                        {isAutheticated ? <>
                         <Tooltip title="Open settings">
-                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg">
-                                    R
-                                </Avatar>
-                            </IconButton>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, cursor: 'pointer' }}>
+                                <Typography sx={{color:"black"}}>Hello, {userName}</Typography>
+                                    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                                        <Avatar alt={userName || ""} src="/static/images/avatar/2.jpg">
+                                            S
+                                        </Avatar>
+                                    </IconButton>
+                            </Box>
                         </Tooltip>
                         <Menu
                             sx={{ mt: '45px' }}
@@ -94,14 +104,17 @@ function Navbar() {
                                 horizontal: 'right',
                             }}
                             open={Boolean(anchorElUser)}
-                            onClose={handleCloseUserMenu}
-                        >
-                            {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                    <Typography style={{ textAlign: 'center' }}>{setting}</Typography>
+                            onClose={handleCloseUserMenu}>
+
+                                <MenuItem onClick={handleCloseUserMenu}>
+                                    <Typography style={{ textAlign: 'center' }}>My Orders</Typography>
                                 </MenuItem>
-                            ))}
+                                <MenuItem  onClick={handleCloseUserMenu}>
+                                    <Typography style={{ textAlign: 'center' }}>Logout</Typography>
+                                </MenuItem>
+
                         </Menu>
+                        </> : <Button sx={{color:"white" , background:"#24acce"}} onClick={handleLogin}>Login</Button>}
                     </Box>
                 </Toolbar>
             </Container>
