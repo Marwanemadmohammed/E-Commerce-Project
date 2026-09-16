@@ -7,6 +7,8 @@ import LoginContainer from "./Containers/Login"
 import CartContainer from "./Containers/CartContainer"
 import ProtectedRoute from "./Components/ProtectedRoute"
 import CartProvider from "./Context/Cart/CartProvider"
+import CheckoutContainer from "./Containers/CheckoutContainer"
+import OrderSuccessPage from "./Containers/OrderSuccess"
 
 
 function App() {
@@ -24,6 +26,8 @@ function App() {
                 <Route path="/loginUser" element = {<LoginContainer />} />
                 <Route element={<ProtectedRoute />}>
                 <Route path="/cart" element = {<CartContainer />} />
+                <Route path="/checkout" element = {<CheckoutContainer />} />
+                <Route path="/Order-success" element = {<OrderSuccessPage />} />
               </Route>
             </Routes>
           </BrowserRouter> 

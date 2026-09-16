@@ -191,7 +191,7 @@ const CartProvider : FC<PropsWithChildren> = ({ children }) => {
             };
 
 
-                        const clearCart = async ()=>{
+            const clearCart = async ()=>{
             try{
             const response = await fetch(`${BASE_URL}/cart`,
             {

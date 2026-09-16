@@ -2,12 +2,15 @@ import { Box, Container, Typography } from "@mui/material";
 import { useCart } from "../Context/Cart/CartContext";
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
+import { useNavigate } from "react-router-dom";
 
 
 
 const CartContainer = () => {
 
     const {cartItems , totalPrice , updateItemCart , deleteItemFromCart , clearCart} = useCart();
+
+    const navigate  = useNavigate();
 
     const handleQuantity = (productId: string , quantity: number) => {
         if(quantity > 0){
@@ -20,6 +23,10 @@ const CartContainer = () => {
         deleteItemFromCart(productId);
     };
 
+
+    const handelCheckout = () => {
+        navigate("/checkout");
+    };
 
 
     return(
@@ -36,7 +43,7 @@ const CartContainer = () => {
                     <Box sx={{display: "flex" , flexDirection: "row" , alignItems: "center" , gap: 6 , padding: "0px 30px"}}>
                         <img src={item.imageUrl}  width={100} alt="Image" />
                         <Box>
-                            <Typography>{item.title}</Typography>
+                            <Typography variant="h6">{item.title}</Typography>
                             <Typography>{item.quantity} &times; {item.unitPrice} EGP</Typography>
                             <Button onClick={()=> handleRemoveItem(item.productId)}>Remove Item</Button>
                         </Box>
@@ -47,8 +54,9 @@ const CartContainer = () => {
                         </ButtonGroup>
                 </Box>
             ))}
-                <Box>
-                    <Typography variant="h6" sx={{marginLeft:"20px" , paddingBottom:"100px"}}>Total Price : {totalPrice.toFixed(2)} EGP</Typography>
+                <Box sx={{padding:"10px 10px 50px 10px", display:"flex" , flexDirection:"row" , justifyContent:"space-between" }}>
+                    <Typography variant="h6">Total Price : {totalPrice.toFixed(2)} EGP</Typography>
+                    <Button variant="contained" sx={{width:"200px"}} onClick={handelCheckout} >Go to Checkout</Button>
                 </Box>
             </Box> : 
                 <Box sx={{backgroundColor:"#eeecec" , textAlign:"center" , padding:"100px",marginTop: "50px" , borderRadius:"10px"}}>
